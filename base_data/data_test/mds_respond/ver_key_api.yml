@@ -1,0 +1,35 @@
+snap:
+  - version: v1
+    key: code
+  - version: v2
+    key: mktcode
+line:
+  - version: v1
+    key: time
+  - version: v2
+    key: time
+list:
+  - version: v1
+    key: code
+  - version: v2
+    key: code
+trd1:
+  - version: v1
+    key: time
+  - version: v2
+    key: time
+trd2:
+  - version: v1
+    key: price
+  - version: v2
+    key: price
+mink:
+  - version: v1
+    key: date
+  - version: v2
+    key: date
+dayk:
+  - version: v1
+    key: date
+  - version: v2
+    key: date

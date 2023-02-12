@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- vector 容器名  -->
+    <shmVector>
+        <!-- 对应名称、元素长度、初始化长度、描述 -->
+        <vector name="secInfoSTK" itemLength="112" initLength="50000" des="股票基础信息"/>
+        <!-- <vector name="srmSnapSTK0001" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0002" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0003" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0004" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0005" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0006" itemLength="65536" initLength="8192" des="srm转换的快照数据"/>
+        <vector name="srmSnapSTK0020" itemLength="65536" initLength="8192" des="srm转换的快照数据"/> -->
+        <vector name="packageSTK0001" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0002" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0003" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0004" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0005" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0006" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTK0020" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="packageSTKOVW" itemLength="256" initLength="100000" des="快照包控制信息"/>
+        <vector name="sse.mtp.ordcnmf.0001" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0002" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0003" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0004" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0005" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0006" itemLength="200" initLength="8000000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.ordcnmf.0020" itemLength="200" initLength="800000" des="竞价逐笔委托主题数据" />
+        <vector name="sse.mtp.trdcnmf.0001" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0002" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0003" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0004" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0005" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0006" itemLength="400" initLength="4000000" des="竞价逐笔成交主题数据" />
+        <vector name="sse.mtp.trdcnmf.0020" itemLength="400" initLength="400000" des="竞价逐笔成交主题数据" />
+        <vector name="set0001" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0002" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0003" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0004" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0005" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0006" itemLength="24" initLength="16000000" des="竞价逐笔排序容器" />
+        <vector name="set0020" itemLength="24" initLength="1600000" des="竞价逐笔排序容器" />
+        <vector name="setc0001" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0002" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0003" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0004" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0005" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0006" itemLength="24" initLength="16000000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="setc0020" itemLength="24" initLength="1600000" des="竞价逐笔排序容器(合并流)" />
+        <vector name="qcmSnapSTK" itemLength="2048" initLength="40000" des="qcm转换的快照数据"/>
+        <vector name="qcmSnapSTKOVW" itemLength="32" initLength="4" des="qcm转换的市场总览数据"/>
+        <vector name="qcmSnapLV1" itemLength="88" initLength="40000" des="qcm公有快照数据"/>
+        <vector name="dateTime" itemLength="4" initLength="2" des="最新公有私有行情时间"/>
+        <vector name="ctlFastSnapSTK0001" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0002" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0003" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0004" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0005" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0006" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTK0020" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0001" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0002" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0003" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0004" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0005" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0006" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastOrdSTK0020" itemLength="24" initLength="100000" des="打包控制信息Fast"/>
+        <vector name="ctlFastSnapSTKOVW" itemLength="24" initLength="100000" des="打包控制信息Fast"/>  
+        <vector name="ctlFastTkSTK" itemLength="24" initLength="100" des="逐笔委托打包控制信息fast"/>
+        <vector name="ctlFastTxSTK" itemLength="24" initLength="100" des="逐笔成交打包控制信息fast"/>
+        <vector name="ctlFastTickSTK" itemLength="24" initLength="100" des="逐笔成交打包控制信息fast"/>
+        <!-- <vector name="ctlBinSnapSTK0001" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0002" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0003" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0004" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0005" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0006" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTK0020" itemLength="24" initLength="1000000" des="打包控制信息Binary"/>
+        <vector name="ctlBinSnapSTKOVW" itemLength="24" initLength="1000000" des="打包控制信息Binary"/> -->
+        <vector name="pubCtlFastQuotMTP" itemLength="24" initLength="600000" des="发布控制信息Fast"/>
+        <vector name="pubCtlFastFileMTP" itemLength="24" initLength="600000" des="发布控制信息Fast"/>
+        <vector name="pubCtlFastOrdMTP" itemLength="24" initLength="600000" des="发布控制信息Fast"/>
+        <vector name="pubCtlFastOrdFileMTP" itemLength="24" initLength="600000" des="发布控制信息Fast"/>
+        <!--vector name="pubCtlBinQuotMTP" itemLength="24" initLength="1000000" des="发布控制信息Binary"/-->
+        <vector name="monitorBpmSnapSTK" itemLength="2048" initLength="20" des="bpm监控信息"/>
+        <vector name="monitorSrmSnapSTK" itemLength="2048" initLength="20" des="srm监控信息"/>
+        <vector name="monitorSrmSubjMTP" itemLength="2048" initLength="20" des="srm竞价平台主题数据监控信息"/>
+        <vector name="monitorQcmSnapSTK" itemLength="2048" initLength="20" des="qcm监控信息"/>
+        <vector name="monitorQcmOrdSTK" itemLength="2048" initLength="20" des="qcm监控信息"/>
+        <vector name="monitorQcmTxSTK" itemLength="2048" initLength="100" des="qcm逐笔插件监控信息"/>
+        <vector name="monitorQcmTickSTK" itemLength="2048" initLength="100" des="qcm逐笔插件监控信息(合并流)"/>
+        <vector name="monitorQcmSortSTK" itemLength="2048" initLength="100" des="qcm排序插件监控信息"/>
+        <vector name="monitorQpmQuotMTP" itemLength="2048" initLength="100" des="qpm quotMTP插件监控信息"/>
+        <vector name="monitorQpmOrdMTP" itemLength="2048" initLength="100" des="qpm OrdMTP插件监控信息"/>
+        <vector name="setidSTK" itemLength="4" initLength="20" des="setId数组"/>
+        <vector name="orderBookSTK0001" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0002" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0003" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0004" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0005" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0006" itemLength="56" initLength="10000000" des="价位容器"/>
+        <vector name="orderBookSTK0020" itemLength="56" initLength="1000000" des="价位容器"/>
+        <vector name="sortedTickSTK0001" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0002" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0003" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0004" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0005" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0006" itemLength="48" initLength="10000000" des="排序容器"/>
+        <vector name="sortedTickSTK0020" itemLength="48" initLength="1000000" des="排序容器"/>
+        <vector name="qcmOrdSTK" itemLength="260" initLength="10000" des="订单簿快照容器"/>
+    </shmVector>
+
+    <!-- list 容器名  -->    
+    <shmList>
+        <!-- 对应名称、(元素长度、初始化长度、)描述 -->
+        <!-- 打包最大大小，最小值1472，最大值32768，小于最小值取最小值，大于最大值取最大值 -->
+        <list name="srmSnapSTK0001" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0002" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0003" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0004" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0005" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0006" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="srmSnapSTK0020" itemLength="4608" des="srm转换的快照数据"/>
+        <list name="pubFastSnapSTK0001" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0002" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0003" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0004" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0005" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0006" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTK0020" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0001" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0002" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0003" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0004" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0005" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0006" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastOrdSTK0020" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastSnapSTKOVW" itemLength="30720" des="发布容器Fast"/>
+        <list name="pubFastTkSTK" itemLength="30720" des="发布容器Fast（竞价逐笔委托）"/>
+        <list name="pubFastTxSTK" itemLength="30720" des="发布容器Fast（竞价逐笔成交）"/>
+        <list name="pubFastTickSTK" itemLength="30720" des="发布容器Fast（竞价逐笔）"/>
+        <!-- <list name="pubBinSnapSTK0001" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0002" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0003" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0004" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0005" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0006" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTK0020" itemLength="30720" des="发布容器Binary"/>
+        <list name="pubBinSnapSTKOVW" itemLength="30720" des="发布容器Binary"/> -->
+    </shmList>
+</configuration>

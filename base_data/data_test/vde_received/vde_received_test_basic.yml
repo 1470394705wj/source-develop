@@ -1,0 +1,649 @@
+defaultFileEncoding: gbk
+defaultChunkSize: 200000
+
+
+dfFilters:
+  dfUnfilteredSnap:
+    dfEntityKeyWords: ''
+  dfLastSnap:
+    dfEntityKeyWords: last_snap
+    dropDpKwargs:
+      keep: last
+  dfSyncSnap:
+    dfEntityKeyWords: sync_snap
+    dropDpKwargs:
+      keep: first
+  dfFundIOPVUniqSnap:
+    dfEntityKeyWords: fund_iopv_uniq_snap
+    dropRedundantExpr: f"chunk.index[[not i.startswith('5') for i in chunk['{fields_name_mapping.get('securityID')}']]]"
+    dropDpKwargs:
+      keep: first
+  dfSampledAllSnap:
+    dfEntityKeyWords: sampled_all_snap
+    dropRedundantExpr: f"chunk.index[~(chunk['{fields_name_mapping.get('securityID')}'].isin({self._sample_security_ids}))]"
+  dfIdxDataTimeUniqSnap:
+    dfEntityKeyWords: idx_data_time_uniq_snap
+    dropDpKwargs:
+      keep: first
+  dfForwardingTimeUniqTx:
+    dfEntityKeyWords: forwarding_time_uniq_tx
+    stopIterationExpr: f"chunk['{fields_name_mapping.get('trdOrOrdTime')}'].iloc[0].rjust(8, '0').removeprefix('00').ljust(8, '0') >
+      '{self._statistical_end_time}'"
+    dropRedundantExpr: f"chunk.index[[i.rjust(8, '0').removeprefix('00').ljust(8, '0') > '{self._statistical_end_time}'
+      for i in chunk['{fields_name_mapping.get('trdOrOrdTime')}']]]"
+    dropDpKwargs:
+      keep: last
+
+
+snapDataFieldsInfo:
+  UA3202:
+    readFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 行情时间
+      - 证券代码
+      - 快照类型(1：全，2：增)
+      - 昨收盘价
+      - 开盘价
+      - 最高价
+      - 最低价
+      - 现价
+      - 今日收盘价格
+      - 当前品种交易状态
+      - 当前产品状态
+      - 成交笔数
+      - 成交总量
+      - 成交总金额（元）
+      - 委托买入总量
+      - 加权平均委买价格（元）
+      - 债券加权平均委买价格（元）
+      - 委托卖出总量
+      - 加权平均委卖价格（元）
+      - 债券加权平均委卖价格
+      - ETF净值估值
+      - ETF申购笔数
+      - ETF申购数量
+      - ETF申购金额
+      - ETF赎回笔数
+      - ETF赎回数量
+      - ETF赎回金额
+      - 债券到期收益率
+      - 权证执行的总数量
+      - 债券质押式回购品种加权平均价
+      - 权证涨停价格（元）
+      - 买入撤单笔数
+      - 买入撤单数量
+      - 买入撤单金额
+      - 卖出撤单笔数
+      - 卖出撤单数量
+      - 卖出撤单金额
+      - 买入总笔数
+      - 卖出总笔数
+      - 买入委托成交最大等待时间
+      - 卖出委托成交最大等待时间
+      - 买方委托价位数
+      - 卖方委托价位数
+      - 买盘价位数量
+      - 买1价格
+      - 买1申买量
+      - 买1实际总委托笔数
+      - 买1发布委托笔数
+      - 买1订单量
+      - 买2价格
+      - 买2申买量
+      - 买2实际总委托笔数
+      - 买2发布委托笔数
+      - 买2订单量
+      - 买3价格
+      - 买3申买量
+      - 买3实际总委托笔数
+      - 买3发布委托笔数
+      - 买3订单量
+      - 买4价格
+      - 买4申买量
+      - 买4实际总委托笔数
+      - 买4发布委托笔数
+      - 买4订单量
+      - 买5价格
+      - 买5申买量
+      - 买5实际总委托笔数
+      - 买5发布委托笔数
+      - 买5订单量
+      - 买6价格
+      - 买6申买量
+      - 买6实际总委托笔数
+      - 买6发布委托笔数
+      - 买6订单量
+      - 买7价格
+      - 买7申买量
+      - 买7实际总委托笔数
+      - 买7发布委托笔数
+      - 买7订单量
+      - 买8价格
+      - 买8申买量
+      - 买8实际总委托笔数
+      - 买8发布委托笔数
+      - 买8订单量
+      - 买9价格
+      - 买9申买量
+      - 买9实际总委托笔数
+      - 买9发布委托笔数
+      - 买9订单量
+      - 买10价格
+      - 买10申买量
+      - 买10实际总委托笔数
+      - 买10发布委托笔数
+      - 买10订单量
+      - 卖盘价位数量
+      - 卖1价格
+      - 卖1申卖量
+      - 卖1实际总委托笔数
+      - 卖1发布委托笔数
+      - 卖1订单量
+      - 卖2价格
+      - 卖2申卖量
+      - 卖2实际总委托笔数
+      - 卖2发布委托笔数
+      - 卖2订单量
+      - 卖3价格
+      - 卖3申卖量
+      - 卖3实际总委托笔数
+      - 卖3发布委托笔数
+      - 卖3订单量
+      - 卖4价格
+      - 卖4申卖量
+      - 卖4实际总委托笔数
+      - 卖4发布委托笔数
+      - 卖4订单量
+      - 卖5价格
+      - 卖5申卖量
+      - 卖5实际总委托笔数
+      - 卖5发布委托笔数
+      - 卖5订单量
+      - 卖6价格
+      - 卖6申卖量
+      - 卖6实际总委托笔数
+      - 卖6发布委托笔数
+      - 卖6订单量
+      - 卖7价格
+      - 卖7申卖量
+      - 卖7实际总委托笔数
+      - 卖7发布委托笔数
+      - 卖7订单量
+      - 卖8价格
+      - 卖8申卖量
+      - 卖8实际总委托笔数
+      - 卖8发布委托笔数
+      - 卖8订单量
+      - 卖9价格
+      - 卖9申卖量
+      - 卖9实际总委托笔数
+      - 卖9发布委托笔数
+      - 卖9订单量
+      - 卖10价格
+      - 卖10申卖量
+      - 卖10实际总委托笔数
+      - 卖10发布委托笔数
+      - 卖10订单量
+    snapComparisonIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 行情时间
+      - 买入委托成交最大等待时间
+      - 卖出委托成交最大等待时间
+    snapStatisticIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+    commFieldsInfo:
+      dataTime:
+        fieldName: 行情时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+      prevClosePrice:
+        fieldName: 昨收盘价
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      openPrice:
+        fieldName: 开盘价
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      highPrice:
+        fieldName: 最高价
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      lowPrice:
+        fieldName: 最低价
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      lastPrice:
+        fieldName: 现价
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      closePrice:
+        fieldName: 今日收盘价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.00000'
+      tradingPhaseCode:
+        fieldName: 当前产品状态
+      numTrades:
+        fieldName: 成交笔数
+      totalVolumeTrade:
+        fieldName: 成交总量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      totalValueTrade:
+        fieldName: 成交总金额（元）
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0'
+        valueRoundingMode: ROUND_HALF_UP
+      highPrecisionIOPV:
+        fieldName: 权证涨停价格（元）
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      lowPrecisionIOPV:
+        fieldName: ETF净值估值
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid1Price:
+        fieldName: 买1价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid1OrdQty:
+        fieldName: 买1申买量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      bid2Price:
+        fieldName: 买2价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid2OrdQty:
+        fieldName: 买2申买量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      bid3Price:
+        fieldName: 买3价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid3OrdQty:
+        fieldName: 买3申买量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      bid4Price:
+        fieldName: 买4价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid4OrdQty:
+        fieldName: 买4申买量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      bid5Price:
+        fieldName: 买5价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      bid5OrdQty:
+        fieldName: 买5申买量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      offer1Price:
+        fieldName: 卖1价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      offer1OrdQty:
+        fieldName: 卖1申卖量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      offer2Price:
+        fieldName: 卖2价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      offer2OrdQty:
+        fieldName: 卖2申卖量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      offer3Price:
+        fieldName: 卖3价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      offer3OrdQty:
+        fieldName: 卖3申卖量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      offer4Price:
+        fieldName: 卖4价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      offer4OrdQty:
+        fieldName: 卖4申卖量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+      offer5Price:
+        fieldName: 卖5价格
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0.000'
+      offer5OrdQty:
+        fieldName: 卖5申卖量
+        valueScalingFactor: 0.001
+        valuePrecisionExp: '0'
+
+  UA3113:
+    readFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 行情时间
+      - 证券代码
+      - 数据类型(1：重复，2：未授权)
+      - 前收盘指数
+      - 今开盘指数
+      - 成交金额（元）
+      - 最高指数
+      - 最低指数
+      - 最新指数
+      - 成交时间
+      - 参与计算相应指数的交易数量（手）
+      - 今日收盘指数（大于0 为有效值）
+    snapComparisonIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 行情时间
+    snapStatisticIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+    commFieldsInfo:
+      dataTime:
+        fieldName: 行情时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+      prevClosePrice:
+        fieldName: 前收盘指数
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      openPrice:
+        fieldName: 今开盘指数
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      highPrice:
+        fieldName: 最高指数
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      lowPrice:
+        fieldName: 最低指数
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      lastPrice:
+        fieldName: 最新指数
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      closePrice:
+        fieldName: 今日收盘指数（大于0 为有效值）
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0.00000'
+      totalVolumeTrade:
+        fieldName: 参与计算相应指数的交易数量（手）
+        valueScalingFactor: 0.00001
+        valuePrecisionExp: '0'
+      totalValueTrade:
+        fieldName: 成交金额（元）
+        valueScalingFactor: 0.1
+        valuePrecisionExp: '0'
+        valueRoundingMode: ROUND_HALF_UP
+      idxTradeTime:
+        fieldName: 成交时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+
+  UA3115:
+    readFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 行情时间（秒）
+      - 数据状态
+      - 证券代码
+      - 市场时间（百分之一秒）
+      - 市场日期
+    snapStatisticIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+    commFieldsInfo:
+      dataTime:
+        fieldName: 行情时间（秒）
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+
+  UA5302:
+    readFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 证券代码
+      - 产品简称
+      - 证券类型
+      - 交易盘交易模式
+      - 全市场行情状态
+      - 应用模块ID
+      - 行情类型
+      - 交易日期
+      - 最新更新时间
+      - 行情产品数量
+      - 行情类别
+      - 成交价
+      - 昨收盘价
+      - 成交笔数
+      - 成交总量
+      - 成交总额
+      - 昨结算价
+      - 未平仓合约数量
+      - 指数价格
+      - 指数时间
+      - 今开盘价
+      - 今收盘价
+      - 当日最高成交价
+      - 当日最低成交价
+      - 买1价格
+      - 买1申买量
+      - 买2价格
+      - 买2申买量
+      - 买3价格
+      - 买3申买量
+      - 买4价格
+      - 买4申买量
+      - 买5价格
+      - 买5申买量
+      - 卖1价格
+      - 卖1申卖量
+      - 卖2价格
+      - 卖2申卖量
+      - 卖3价格
+      - 卖3申卖量
+      - 卖4价格
+      - 卖4申卖量
+      - 卖5价格
+      - 卖5申卖量
+      - 成交价
+      - 成交量
+      - 成交时间
+      - 动态参考价格
+      - 动态参考价量
+      - 动态参考时间
+      - IOPV
+      - NAV
+      - TradingPhaseCode
+    snapComparisonIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+      - 数据落地时间
+      - 最新更新时间
+    snapStatisticIgnoreFields:
+      - 市场
+      - 消息类型
+      - 消息号
+    commFieldsInfo:
+      dataTime:
+        fieldName: 最新更新时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+      prevClosePrice:
+        fieldName: 昨收盘价
+        valuePrecisionExp: '0.00000'
+      openPrice:
+        fieldName: 今开盘价
+        valuePrecisionExp: '0.00000'
+      highPrice:
+        fieldName: 当日最高成交价
+        valuePrecisionExp: '0.00000'
+      lowPrice:
+        fieldName: 当日最低成交价
+        valuePrecisionExp: '0.00000'
+      lastPrice:
+        fieldName: 成交价
+        valuePrecisionExp: '0.00000'
+      closePrice:
+        fieldName: 今收盘价
+        valuePrecisionExp: '0.00000'
+      tradingPhaseCode:
+        fieldName: TradingPhaseCode
+      numTrades:
+        fieldName: 成交笔数
+      totalVolumeTrade:
+        fieldName: 成交总量
+        valuePrecisionExp: '0'
+      totalValueTrade:
+        fieldName: 成交总额
+        valuePrecisionExp: '0'
+        valueRoundingMode: ROUND_HALF_UP
+      idxLastPrice:
+        fieldName: 指数价格
+        valuePrecisionExp: '0.00000'
+      idxTradeTime:
+        fieldName: 指数时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      highPrecisionIOPV:
+        fieldName: IOPV
+        valuePrecisionExp: '0.00000'
+      bid1Price:
+        fieldName: 买1价格
+        valuePrecisionExp: '0.000'
+      bid1OrdQty:
+        fieldName: 买1申买量
+        valuePrecisionExp: '0'
+      bid2Price:
+        fieldName: 买2价格
+        valuePrecisionExp: '0.000'
+      bid2OrdQty:
+        fieldName: 买2申买量
+        valuePrecisionExp: '0'
+      bid3Price:
+        fieldName: 买3价格
+        valuePrecisionExp: '0.000'
+      bid3OrdQty:
+        fieldName: 买3申买量
+        valuePrecisionExp: '0'
+      bid4Price:
+        fieldName: 买4价格
+        valuePrecisionExp: '0.000'
+      bid4OrdQty:
+        fieldName: 买4申买量
+        valuePrecisionExp: '0'
+      bid5Price:
+        fieldName: 买5价格
+        valuePrecisionExp: '0.000'
+      bid5OrdQty:
+        fieldName: 买5申买量
+        valuePrecisionExp: '0'
+      offer1Price:
+        fieldName: 卖1价格
+        valuePrecisionExp: '0.000'
+      offer1OrdQty:
+        fieldName: 卖1申卖量
+        valuePrecisionExp: '0'
+      offer2Price:
+        fieldName: 卖2价格
+        valuePrecisionExp: '0.000'
+      offer2OrdQty:
+        fieldName: 卖2申卖量
+        valuePrecisionExp: '0'
+      offer3Price:
+        fieldName: 卖3价格
+        valuePrecisionExp: '0.000'
+      offer3OrdQty:
+        fieldName: 卖3申卖量
+        valuePrecisionExp: '0'
+      offer4Price:
+        fieldName: 卖4价格
+        valuePrecisionExp: '0.000'
+      offer4OrdQty:
+        fieldName: 卖4申卖量
+        valuePrecisionExp: '0'
+      offer5Price:
+        fieldName: 卖5价格
+        valuePrecisionExp: '0.000'
+      offer5OrdQty:
+        fieldName: 卖5申卖量
+        valuePrecisionExp: '0'
+
+
+txDataFieldsInfo:
+  UA3201:
+    readFields:
+      - 数据落地时间
+      - 证券代码
+      - 成交序号
+      - 成交时间
+    commFieldsInfo:
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+      trdOrOrdTime:
+        fieldName: 成交时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      vdeDatetime:
+        fieldName: 数据落地时间
+        fieldType: string
+        datetimeFormat: '%Y%m%d-%H:%M:%S'
+
+  UA5801:
+    readFields:
+      - 数据落地时间
+      - 证券代码
+      - 委托序号
+      - 委托时间
+    commFieldsInfo:
+      securityID:
+        fieldName: 证券代码
+        fieldType: string
+      trdOrOrdTime:
+        fieldName: 委托时间
+        fieldType: string
+        timeFormat: '%H%M%S%f'
+      vdeDatetime:
+        fieldName: 数据落地时间
+        fieldType: string
+        datetimeFormat: '%Y%m%d-%H:%M:%S'

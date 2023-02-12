@@ -1,0 +1,23 @@
+- moduleName: ppm
+  setupFUAD:
+    - method: upload
+      localPath: rf"{self.localDataDir}/ppm.xml"
+      remotePath: rf"{self.remoteConfDir}/ppm.xml.temp"
+    - method: upload
+      localPath: rf"{self.localDataDir}/shmSTK.xml"
+      remotePath: rf"{self.remoteConfDir}/shmSTK.xml.temp"
+    - method: upload
+      localPath: rf"{self.localDataDir}/libppmQuotCOM.so.5.5.0"
+      remotePath: rf"{self.dceHome}/bin/plugin/libppmQuotCOM.so.5.5.0"
+  setupCmd: rf"cd {self.remoteConfDir};
+    mv ppm.xml ppm.xml.default;
+    mv shmSTK.xml shmSTK.xml.default;
+    mv ppm.xml.temp ppm.xml;
+    mv shmSTK.xml.temp shmSTK.xml;
+    sed -i -e 's/0\.0\.0\.0/{self.hostIp}/g'
+    -e 's/DCE-001/DCE-{self.hostIp.split('.')[-1].rjust(3, '0')}/g' ppm.xml;
+    chmod 700 {self.dceHome}/bin/plugin/libppmQuotCOM.so.5.5.0"
+  teardownCmd: rf"cd {self.remoteConfDir};
+    mv ppm.xml.default ppm.xml;
+    mv shmSTK.xml.default shmSTK.xml;
+    rm -f {self.dceHome}/bin/plugin/libppmQuotCOM.so.5.5.0"

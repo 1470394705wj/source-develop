@@ -1,0 +1,44 @@
+{
+  "client": [
+//    {
+//      "uri": "file:/F:/rawData/20230120/JQ-Ldds-RawData-SH-L2-20230120.dat",
+//      "protocol": "Step",
+//      "parse_class": "com.sseinfo.bfcodec.parse.SHL1FastMsgParse",
+//      "parse_params": {
+//        "category": "6,7,58,9",
+//        "stockList": "all",
+//        "startTime": "09:00:00",
+//        "endTime": "23:59:59",
+//        "showTagCol": "true",
+//        "showHis": "false",
+//        "cacheThreadSize": "20",
+//        "fileThreadSize": "10",
+//        "byteBuffer": 52428800,
+//        "rootPath": "F:/decodedData/",
+//        "handler": [
+//          "com.sseinfo.bfcodec.service.FileSingleEntityHandler"
+//        ]
+//      }
+//    },
+    {
+      "uri": "file:/E:/rawData/20230201/WGQ-Ldds-RawData-SH-L2-20230201.dat",
+      "protocol": "Step",
+      "parse_class": "com.sseinfo.bfcodec.parse.SHL2MsgParse",
+      "parse_params": {
+        "category": "6,7,9,58",
+        "stockList": "all",
+        "startTime": "00:00:01",
+        "endTime": "23:23:59",
+        "showTagCol": "true",
+        "showHis": "false",
+        "cacheThreadSize": "20",
+        "fileThreadSize": "10",
+        "byteBuffer": 52428800,
+        "rootPath": "E:/decodedData/wgq/",
+        "handler": [
+          "com.sseinfo.bfcodec.service.FileSingleEntityHandler"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+*.log*
+*.idea
+*.pytest_cache
+*__pycache__
+*report
+*venv
+/data/data_test/

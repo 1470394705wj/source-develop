@@ -1,0 +1,20 @@
+dce:
+  projectModules:
+    - ppm
+    - bpm
+    - srm
+    - qcm
+    - qpm
+    - ehm
+    - mnm
+
+ldds:
+  projectModules:
+    - auth
+    - fileService
+    - transaction
+    - gateway
+
+mds:
+  projectModules:
+    -

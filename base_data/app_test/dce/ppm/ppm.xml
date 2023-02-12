@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration program="ppm" version="1.0.0">
+	<settings>
+		<!-- 主机信息(必配) -->
+	    <setting name="hostName" value="DCE-001" des="主机名" />
+	    <setting name="hostIp" value="0.0.0.0" des="主机IP" />
+	    
+        <!-- 共享内存信息(必配) -->
+        <setting name="shmName" value="level2_dce_shm" des="共享内存名称" />
+	    <setting name="shmSize" value="90" des="共享内存大小,单位GB" />
+        <!-- 交易日历文件(必配) -->
+		<setting name="tradeDay" value="tradeday.dat" />
+        <!-- 交易日配置，方便测试，生产时不配，默认获取当日系统日期 -->
+		<!-- setting name="today" value="20200616" /-->
+	</settings>
+
+    <!-- plugin配置：优先级，版本，插件路径，配置文件路径-->
+    <modules>
+        <plugin name="quotCOM@ppm" value="libppmQuotCOM.so">
+            <property name="priority" value="10" />
+            <property name="version" value="1.0.0" />
+            <property name="path" value="bin/plugin" />
+            <property name="config" value="ppmQuotCOM.xml" />
+        </plugin>
+    </modules>
+
+    <!--本机应用运行日志配置，日志名，日志类别，日志级别: 0 Debug 1 Info 2 Warn 3 Error -->
+    <Loggers>
+        <log name="ppm" logtype="applog" method="FILE" level="1" path="log/applog" />
+        <log name="ppm" logtype="applog" method="ALARM" level="2" path="log/alarm@dce$DCE-001^0.0.0.0" des="ALARM:ppm模块写统一监控告警文件" />
+        <log name="ppm" logtype="applog" method="LDDS" level="2" path="udp://224.0.1.10:18000#0.0.0.0@dce$DCE-001^0.0.0.0" />
+    </Loggers>
+
+    <!--程序运行参数，运行参数描述 -->
+    <argument name="version" des="显示程序版本并退出" />
+    <argument name="start" des="初始化并加载公共模块,返回0为成功，其他失败请查看日志文件">
+        <!-- 数据源 Level-2 -->
+        <App>
+            <property name="appName" value="dce" des="程序名称(必配)" />
+            <property name="appVersion" value="V2.3.0" des="程序版本(必配)" />
+        </App>
+    </argument>
+    <argument name="shutdown" des="收盘并卸载公共模块,返回0为成功，其他失败请查看日志文件" />
+</configuration>

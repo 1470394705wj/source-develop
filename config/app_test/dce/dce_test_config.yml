@@ -1,0 +1,7 @@
+hostIp: 10.10.21.92
+dceHome: /level2/jenkins_deploy/dce_V2.3.0_RC4
+staticFilePath: /level2/dce/static/
+tradeDay: 20220316
+testRunTypes:
+  - plain
+  - load

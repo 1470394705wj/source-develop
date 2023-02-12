@@ -1,0 +1,29 @@
+mdsRespond:
+  viewName: MDS响应数据对比测试
+  dirName: mds_respond
+  testItems:
+    - testName: 接口请求测试
+      testMethod: api_request
+    - testName: 响应落地数据对比
+      testMethod: respond_compare
+
+vdeReceived:
+  viewName: VDE落地数据对比测试
+  dirName: vde_received
+  testItems:
+    - testName: 落地数据中最后一幅快照对比
+      testMethod: last_snap_comparison
+    - testName: 落地数据中证券代码对比
+      testMethod: security_id_comparison
+    - testName: 落地数据中基金IOPV精度比对
+      testMethod: fund_iopv_precision_comparison
+    - testName: 落地数据抽样代码IOPV走势统计
+      testMethod: sampled_iopv_statistic
+    - testName: 落地数据抽样代码最新价走势统计
+      testMethod: sampled_last_price_statistic
+    - testName: 落地数据抽样代码快照更新频率走势统计
+      testMethod: sampled_snap_update_freq_statistic
+    - testName: 落地数据指数快照更新频率统计
+      testMethod: idx_snap_update_freq_statistic
+    - testName: 落地数据逐笔最大转发时延走势统计
+      testMethod: tx_max_forwarding_delay_statistic

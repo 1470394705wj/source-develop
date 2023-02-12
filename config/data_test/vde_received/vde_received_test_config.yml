@@ -1,0 +1,290 @@
+# 快照数据比对
+snapComparison:
+  # 作为比对标准的数据组信息，可以列表形式配置多份数据，但同组数据之间不会执行比较
+  standardDataInfos:
+    - dataName: bx_sh_L1_UA5302_20221213
+      dataPath: E:/decodedData/bx/20221213/sh_L1_UA5302_20221213.csv
+      dataMsgType: UA5302
+
+  # 比对任务列表，可以列表形式配置多个比对任务，每个比对任务必须同时具备 comparedDataInfos 和 testItems 这两个 key
+  testTasks:
+      # 比对任务中与标准数据组进行比较的数据组信息，可以列表形式配置多份数据，但同组数据之间不会执行比较
+    - comparedDataInfos:
+        - dataName: bx_sh_L2_UA3202_20221213
+          dataPath: E:/decodedData/bx/20221213/sh_L2_UA3202_20221213.csv
+          dataMsgType: UA3202
+
+        - dataName: bx_sh_L2_UA3113_20221213
+          dataPath: E:/decodedData/bx/20221213/sh_L2_UA3113_20221213.csv
+          dataMsgType: UA3113
+      # 比对任务中的比较项目，同一比较数据组可根据数据类型与实际需要配置多个比较项目
+      testItems:
+        # 最后一幅快照比对
+        lastSnap:
+          primaryKeyFields:
+            - securityID
+          ignoreUniqRows: True
+
+        # 同步快照比对（以总成交量为同步快照认定标准，但暂未应用）
+        syncSnap:
+          primaryKeyFields:
+            - securityID
+            - totalVolumeTrade
+          ignoreUniqRows: True
+
+        # 证券代码比对（日志输出代码数量，文件输出具体差异代码）
+        securityID:
+          primaryKeyFields:
+            - securityID
+
+        # 基金 IOPV 精度比对
+        fundIOPVPrecision:
+          primaryKeyFields:
+            - securityID
+            - highPrecisionIOPV
+          ignoreUniqRows: True
+
+# 快照数据统计
+snapStatistic:
+  # 参与统计的快照数据组信息，吧
+  dataInfos:
+    - dataName: sh_L2_UA3202_20230120
+      dataPath: E:/decodedData/jq/20230120/sh_L2_UA3202_20230120.csv
+      dataMsgType: UA3202
+
+    - dataName: sh_L2_UA3113_20230120
+      dataPath: E:/decodedData/jq/20230120/sh_L2_UA3113_20230120.csv
+      dataMsgType: UA3113
+
+    - dataName: sh_L2_UA3115_20230120
+      dataPath: E:/decodedData/jq/20230120/sh_L2_UA3115_20230120.csv
+      dataMsgType: UA3115
+##
+#    - dataName: wgq_sh_L2_UA3113_20221213
+#      dataPath: E:/decodedData/wgq/20221219/UA3113.csv
+#      dataMsgType: UA3113
+
+#    - dataName: bx_sh_L2_UA3115_20221213
+#      dataPath: E:/decodedData/bx/20221213/sh_L2_UA3115_20221213.csv
+#      dataMsgType: UA3115
+#
+#    - dataName: jq_sh_L1_U   A5302_20221213
+#      dataPath: G:/decodedData/jq/20221213/sh_L1_UA5302_20221213.csv
+#      dataMsgType: UA5302
+#
+#
+#    - dataName: jq_sh_L2_UA3113_20221213
+#      dataPath: G:/decodedData/jq/20221213/sh_L2_UA3113_20221213.csv
+#      dataMsgType: UA3113
+#
+#    - dataName: UA3201
+#      dataPath: E:/decodedData/bx/20221219/UA3201.csv
+#      dataMsgType: UA3201
+#
+#    - dataName: sh_L2_UA3115_20221219
+#      dataPath: E:/decodedData/wgq/20221219/sh_L2_UA3115_20221219.csv
+#      dataMsgType: UA3115
+##
+#    - dataName: sh_L2_UA3113_20221219
+#      dataPath: E:/decodedData/wgq/20221219/sh_L2_UA3113_20221219.csv
+#      dataMsgType: UA3113
+
+#    - dataName: sh_L2_UA3202_20221219
+#      dataPath: E:/decodedData/wgq/20221219/sh_L2_UA3202_20221219.csv
+#      dataMsgType: UA3202
+
+#    - dataName: sh_L2_UA3202_20221219
+#      dataPath: E:/decodedData/wgq/20221219/sh_L2_UA3202_20221219.csv
+#      dataMsgType: UA3202
+
+#    - dataName: bx_sh_L2_UA3202_20221213
+#      dataPath: E:/decodedData/bx/20221219/UA3201.csv
+#      dataMsgType: UA3201
+
+#    - dataName: wgq_sh_L2_UA3113_20221213
+#      dataPath: G:/decodedData/wgq/20221213/sh_L2_UA3113_20221213.csv
+#      dataMsgType: UA3113
+##
+#    - dataName: wgq_sh_L2_UA3115_20221219
+#      dataPath: E:/decodedData/wgq/20221219/sh_L2_UA3115_20221219.csv
+#      dataMsgType: UA3115
+
+  # 快照数据的交易日期（目前仅支持同一交易日的数据一起统计）
+  tradeDate: '20221219'
+
+  # 抽样的证券代码
+  sampleSecurityIDs:
+    - '000000'
+    - '000001'
+    - '000170'
+    - '510050'
+    - '510300'
+    - '508099'
+    - '600519'
+
+  # 统计项目
+  testItems:
+    # 抽样基金代码 IOPV 走势统计
+    sampledIOPV:
+      # 走势统计的时间范围
+      statisticalTimeInterval:
+        startTime: '091500'
+        endTime: '153000'
+
+    # 抽样代码最新价走势统计
+    sampledLastPrice:
+      # 走势统计的时间范围
+      statisticalTimeInterval:
+        startTime: '091500'
+        endTime: '153000'
+      # 是否忽略最新价为零的快照
+      ignore0Values: True
+
+    # 抽样代码快照更新频率走势统计
+    sampledSnapUpdateFreq:
+      # 走势统计的时间范围
+
+
+      statisticalTimeInterval:
+        startTime: '091500'
+        endTime: '153000'
+      # 是否只统计指数代码的更新频率走势，且将其输出到同一文件
+      onlyIdx: True
+
+    # 指数快照更新频率值统计
+    idxSnapUpdateFreq:
+      primaryKeyFields:
+        - dataTime
+      # 预期更新频率的合理范围
+      expectedValueRange:
+        min: 0
+        max: 6
+
+# 逐笔数据统计
+txStatistic:
+  # 参与统计的逐笔数据组信息，可以列表形式配置多份数据
+  dataInfos:
+    - dataName: bx_sh_L2_UA3201_20221213
+      dataPath: G:/decodedData/bx/20221213/sh_L2_UA3201_20221213.csv
+      dataMsgType: UA3201
+
+    - dataName: bx_sh_L2_UA5801_20221213
+      dataPath: G:/decodedData/bx/20221213/sh_L2_UA5801_20221213.csv
+      dataMsgType: UA5801
+
+    - dataName: jq_sh_L2_UA3201_20221213
+      dataPath: G:/decodedData/jq/20221213/sh_L2_UA3201_20221213.csv
+      dataMsgType: UA3201
+
+    - dataName: jq_sh_L2_UA5801_20221213
+      dataPath: G:/decodedData/jq/20221213/sh_L2_UA5801_20221213.csv
+      dataMsgType: UA5801
+
+  #    - dataName: wgq_sh_L2_UA3201_20221213
+  #      dataPath: G:/decodedData/wgq/20221213/sh_L2_UA3201_20221213.csv
+  #      dataMsgType: UA3201
+  #
+  #    - dataName: wgq_sh_L2_UA5801_20221213
+  #      dataPath: G:/decodedData/wgq/20221213/sh_L2_UA5801_20221213.csv
+  #      dataMsgType: UA5801
+
+  # 逐笔数据的交易日期（目前仅支持同一交易日的数据一起统计）
+  tradeDate: '20221213'
+
+  # 统计项目
+  testItems:
+    # 最大转发时延走势统计
+    maxForwardingDelay:
+      primaryKeyFields:
+        - vdeDatetime
+        - trdOrOrdTime
+      # 走势统计的时间范围
+      statisticalTimeInterval:
+        startTime: '092500'
+        endTime: '094500'
+
+
+  # 丢包统计
+statisticsLosePacket:
+  dataInfos:
+    bx:
+        - dataName: sh_L2_UA3113_20230207
+          dataPath: E:/decodedData/bx/20230207/sh_L2_UA3113_20230207.csv
+          dataMsgType: UA3113
+
+        - dataName: sh_L2_UA3115_20230207
+          dataPath: E:/decodedData/bx/20230207/sh_L2_UA3115_20230207.csv
+          dataMsgType: UA3115
+
+        - dataName: sh_L2_UA3201_20230207
+          dataPath: E:/decodedData/bx/20230207/sh_L2_UA3201_20230207.csv
+          dataMsgType: UA3201
+
+        - dataName: sh_L2_UA3202_20230207
+          dataPath: E:/decodedData/bx/20230207/sh_L2_UA3202_20230207.csv
+          dataMsgType: UA3202
+
+        - dataName: sh_L2_UA5801_20230207
+          dataPath: E:/decodedData/bx/20230207/sh_L2_UA5801_20230207.csv
+          dataMsgType: UA5801
+##
+#    jq:
+#        - dataName: sh_L2_UA3113_20230207
+#          dataPath: E:/decodedData/jq/20230207/sh_L2_UA3113_20230207.csv
+#          dataMsgType: UA3113
+#
+#        - dataName: sh_L2_UA3115_20230207
+#          dataPath: E:/decodedData/jq/20230207/sh_L2_UA3115_20230207.csv
+#          dataMsgType: UA3115
+#
+#        - dataName: sh_L2_UA3201_20230207
+#          dataPath: E:/decodedData/jq/20230207/sh_L2_UA3201_20230207.csv
+#          dataMsgType: UA3201
+#
+#        - dataName: sh_L2_UA3202_20230207
+#          dataPath: E:/decodedData/jq/20230207/sh_L2_UA3202_20230207.csv
+#          dataMsgType: UA3202
+#
+#        - dataName: sh_L2_UA5801_20230207
+#          dataPath: E:/decodedData/jq/20230207/sh_L2_UA5801_20230207.csv
+#          dataMsgType: UA5801
+
+#    wgq:
+#        - dataName: sh_L2_UA3113_20230207
+#          dataPath: E:/decodedData/wgq/20230207/sh_L2_UA3113_20230207.csv
+#          dataMsgType: UA3113
+#
+#        - dataName: sh_L2_UA3115_20230207
+#          dataPath: E:/decodedData/wgq/20230207/sh_L2_UA3115_20230207.csv
+#          dataMsgType: UA3115
+##
+#        - dataName: sh_L2_UA3201_20230207
+#          dataPath: E:/decodedData/wgq/20230207/sh_L2_UA3201_20230207.csv
+#          dataMsgType: UA3201
+##
+#        - dataName: sh_L2_UA3202_20230207
+#          dataPath: E:/decodedData/wgq/20230207/sh_L2_UA3202_20230207.csv
+#          dataMsgType: UA3202
+
+#        - dataName: sh_L2_UA5801_20230207
+#          dataPath: E:/decodedData/wgq/20230207/sh_L2_UA5801_20230207.csv
+#          dataMsgType: UA5801
+
+  tradeDate: '20230207'
+
+  statisticalTimeInterval:
+    - '90000'
+    - '92500'
+    - '120000'
+    - '154500'
+  categoryList:
+    6:  ['UA3113','UA3115','UA3202']
+    7:  ['UA3201']
+    9:  ['UA5803']
+    58:  ['UA5801']
+
+
+
+
+
+

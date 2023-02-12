@@ -1,0 +1,765 @@
+# verifyType 1: verify_process_started
+# verifyType 2: verify_process_closed
+# verifyType 3: verify_console_info
+# verifyType 4: verify_shmdump_info
+# verifyType 5: verify_log_info
+
+- caseId: 1
+  testId: 365443, 365470
+  caseTitle: 测试启动ppm 模块，ppm 成功启动的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48550272688
+
+- caseId: 2
+  testId: 365444, 365471
+  caseTitle: 测试启动ppm 模块，ppm 成功关闭的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  extraPythonExpr: self.moduleShutdownTime = datetime.now();
+    self.module.shutdown(run_type, self.waitShutdownSecs)
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 2
+          verifyParams:
+            expectFlag: True
+            expectInfo: module
+      load:
+        - verifyType: 2
+          verifyParams:
+            expectFlag: True
+            expectInfo: load
+
+- caseId: 3
+  testId: 365424, 365452
+  caseTitle: 测试启动ppm 模块时，ppm.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      plain:
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Can't find process ppm configure file!
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Can't find child process ppm configure file!
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 4
+  testId: 365450
+  caseTitle: 测试load 模式下启动ppm 模块时，ppmLoad.xml 文件缺失的场景
+  caseRunTypes: [ 'load' ]
+  setupCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml ppmLoad.xml.temp"
+  teardownCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml.temp ppmLoad.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      load:
+        - verifyType: 1
+          verifyParams:
+            expectFlag: False
+            expectInfo: load
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Can't find process ppmLoad configure file!
+
+- caseId: 5
+  testId: 365430, 365456
+  caseTitle: 测试启动ppm 模块时，ppmQuotCOM.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml ppmQuotCOM.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml.temp ppmQuotCOM.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Fail to load ppmComConfig!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -2', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 6
+  testId: 365433, 365460
+  caseTitle: 测试启动ppm 模块时，shmCOM.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmCOM.xml shmCOM.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmCOM.xml.temp shmCOM.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: file[shmCOM.xml] is not exist!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -4', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -6', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 7
+  testId: 365437, 365464
+  caseTitle: 测试启动ppm 模块时，shmSTK.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmSTK.xml shmSTK.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmSTK.xml.temp shmSTK.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: file[shmSTK.xml] is not exist!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -4', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -6', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 8
+  testId: 365435, 365462
+  caseTitle: 测试启动ppm 模块时，shmLV1.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmLV1.xml shmLV1.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmLV1.xml.temp shmLV1.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: file[shmLV1.xml] is not exist!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -4', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -6', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 9
+  testId: 365439, 365466
+  caseTitle: 测试启动ppm 模块时，shmATP.xml 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmATP.xml shmATP.xml.temp"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmATP.xml.temp shmATP.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: file[shmATP.xml] is not exist!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -4', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -6', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 10
+  testId: 365441, 365468
+  caseTitle: 测试启动ppm 模块时，tradeday.dat 文件缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.dceHome}/conf; mv tradeday.dat tradeday.dat.temp"
+  teardownCmd: f"cd {self.module.dceHome}/conf; mv tradeday.dat.temp tradeday.dat"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: TradeDay File  is not found when Check workerday!
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -4', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 11
+  testId: 365425, 365453
+  caseTitle: 测试启动ppm 模块时，ppm.xml 某必配配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/setting name=\"hostName\"/=' ppm.xml.temp | xargs -I xv sed 'xvd' ppm.xml.temp > ppm.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Get config hostName error.
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -5', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -7', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 12
+  testId: 365451
+  caseTitle: 测试load 模式下启动ppm 模块时，ppmLoad.xml 某必配配置项缺失的场景
+  caseRunTypes: [ 'load' ]
+  setupCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml ppmLoad.xml.temp;
+    sed -n '/argument name=\"unload\"/=' ppmLoad.xml.temp | xargs -I xv sed 'xvd' ppmLoad.xml.temp > ppmLoad.xml"
+  teardownCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml.temp ppmLoad.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      load:
+        - verifyType: 1
+          verifyParams:
+            expectFlag: False
+            expectInfo: load
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: f"LoadFile {self.module.dceHome}/conf/load/ppmLoad.xml error, check the file!\r\nFail to open config file:(null)"
+
+- caseId: 13
+  testId: 365432, 365459
+  caseTitle: 测试启动ppm 模块时，ppmQuotCOM.xml COM 配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml ppmQuotCOM.xml.temp;
+    sed -n '/bizType name=\"COM\"/=' ppmQuotCOM.xml.temp | xargs -I xv sed 'xvd' ppmQuotCOM.xml.temp > ppmQuotCOM.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml.temp ppmQuotCOM.xml"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: ShmVector(common) can not be read.
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -4', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child Process\(\d+\) ppm exit normal\. Return value = 0x0
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+
+- caseId: 14
+  testId: 365430, 365457
+  caseTitle: 测试启动ppm 模块时，ppmQuotCOM.xml bizList 配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml ppmQuotCOM.xml.temp;
+    sed -n '/<bizList>/=' ppmQuotCOM.xml.temp | xargs -I xv sed 'xv,+5d' ppmQuotCOM.xml.temp > ppmQuotCOM.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml.temp ppmQuotCOM.xml"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: ShmVector(common) can not be read.
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -4', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 15
+  testId: 365432, 365459
+  caseTitle: 测试启动ppm 模块时，ppmQuotCOM.xml COM 以外的某配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml ppmQuotCOM.xml.temp;
+    sed -n '/bizType name=\"ATP\"/=' ppmQuotCOM.xml.temp | xargs -I xv sed 'xvd' ppmQuotCOM.xml.temp > ppmQuotCOM.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv ppmQuotCOM.xml.temp ppmQuotCOM.xml"
+  waitStartSecs: 25
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=31519415544
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:sse.atp.ie.0102 apitype:vector
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:qcmSnapETF apitype:vector
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:ctlFastSnapETF apitype:vector
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:monitorSrmSubjATP apitype:vector
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:monitorQcmSnapETF apitype:vector
+
+- caseId: 16
+  testId: 365434, 365461
+  caseTitle: 测试启动ppm 模块时，shmCOM.xml 某配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmCOM.xml shmCOM.xml.temp;
+    sed -n '/vector name=\"common\"/=' shmCOM.xml.temp | xargs -I xv sed 'xvd' shmCOM.xml.temp > shmCOM.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmCOM.xml.temp shmCOM.xml"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: ShmVector(common) can not be read.
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep ERROR', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -4', 'head -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child Process\(\d+\) ppm exit normal\. Return value = 0x0
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+
+- caseId: 17
+  testId: 365438, 365465
+  caseTitle: 测试启动ppm 模块时，shmSTK.xml 某配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmSTK.xml shmSTK.xml.temp;
+    sed -n '/vector name=\"secInfoSTK\"/=' shmSTK.xml.temp | xargs -I xv sed 'xvd' shmSTK.xml.temp > shmSTK.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmSTK.xml.temp shmSTK.xml"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48542867088
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:secInfoSTK apitype:vector
+
+- caseId: 18
+  testId: 365436, 365463
+  caseTitle: 测试启动ppm 模块时，shmLV1.xml 某配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmLV1.xml shmLV1.xml.temp;
+    sed -n '/vector name=\"secInfoIDX\"/=' shmLV1.xml.temp | xargs -I xv sed 'xvd' shmLV1.xml.temp > shmLV1.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmLV1.xml.temp shmLV1.xml"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48549087120
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:secInfoIDX apitype:vector
+
+- caseId: 19
+  testId: 365440, 365467
+  caseTitle: 测试启动ppm 模块时，shmATP.xml 某配置项缺失的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: f"cd {self.module.remoteConfDir}; mv shmATP.xml shmATP.xml.temp;
+    sed -n '/vector name=\"qcmSnapETF\"/=' shmATP.xml.temp | xargs -I xv sed 'xvd' shmATP.xml.temp > shmATP.xml"
+  teardownCmd: f"cd {self.module.remoteConfDir}; mv shmATP.xml.temp shmATP.xml"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48545488528
+        - verifyType: 4
+          verifyParams:
+            expectFlag: False
+            expectType: str
+            expectInfo: name:qcmSnapETF apitype:vector
+
+- caseId: 20
+  testId:
+  caseTitle: 测试启动ppm 模块时，ppm.xml 中配置的插件版本号等于实际加载动态库版本号的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/bin/plugin; ln -snf libppmQuotCOM.so.5.5.0 libppmQuotCOM.so;
+    cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/plugin name=\"quotCOM@ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xv,+2s/property name=\"version\" value=\"[0-9]+\.[0-9]+\.[0-9]+\"/property name=\"version\" value=\"5.5.0\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml;
+    cd {self.module.dceHome}/bin/plugin;
+    ls | grep -oP '^libppmQuotCOM\.so\.\d+\.\d+\.\d+$' | grep -v 5.5.0 | xargs -I xv ln -snf xv libppmQuotCOM.so"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48550272688
+
+- caseId: 21
+  testId:
+  caseTitle: 测试启动ppm 模块时，ppm.xml 中配置的插件主版本号小于实际加载动态库主版本号的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/bin/plugin; ln -snf libppmQuotCOM.so.5.5.0 libppmQuotCOM.so;
+    cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/plugin name=\"quotCOM@ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xv,+2s/property name=\"version\" value=\"[0-9]+\.[0-9]+\.[0-9]+\"/property name=\"version\" value=\"4.5.0\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml;
+    cd {self.module.dceHome}/bin/plugin;
+    ls | grep -oP '^libppmQuotCOM\.so\.\d+\.\d+\.\d+$' | grep -v 5.5.0 | xargs -I xv ln -snf xv libppmQuotCOM.so"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Fail to load plug-in(quotCOM@ppm), configuration version(4.5.0) does not match the actual version(5.5.0).
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 22
+  testId:
+  caseTitle: 测试启动ppm 模块时，ppm.xml 中配置的插件主版本号大于实际加载动态库主版本号的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/bin/plugin; ln -snf libppmQuotCOM.so.5.5.0 libppmQuotCOM.so;
+    cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/plugin name=\"quotCOM@ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xv,+2s/property name=\"version\" value=\"[0-9]+\.[0-9]+\.[0-9]+\"/property name=\"version\" value=\"6.5.0\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml;
+    cd {self.module.dceHome}/bin/plugin;
+    ls | grep -oP '^libppmQuotCOM\.so\.\d+\.\d+\.\d+$' | grep -v 5.5.0 | xargs -I xv ln -snf xv libppmQuotCOM.so"
+  expect:
+    moduleStartResult: failed
+    extraVerifyPoints:
+      common:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Fail to load plug-in(quotCOM@ppm), configuration version(6.5.0) does not match the actual version(5.5.0).
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -1' ]
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child process\(\d+\) ppm is exited
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep ERROR', 'tail -1' ]
+
+- caseId: 23
+  testId:
+  caseTitle: 测试启动ppm 模块时，ppm.xml 中配置的插件次版本号大于实际加载动态库次版本号的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/bin/plugin; ln -snf libppmQuotCOM.so.5.5.0 libppmQuotCOM.so;
+    cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/plugin name=\"quotCOM@ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xv,+2s/property name=\"version\" value=\"[0-9]+\.[0-9]+\.[0-9]+\"/property name=\"version\" value=\"5.6.0\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml;
+    cd {self.module.dceHome}/bin/plugin;
+    ls | grep -oP '^libppmQuotCOM\.so\.\d+\.\d+\.\d+$' | grep -v 5.5.0 | xargs -I xv ln -snf xv libppmQuotCOM.so"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48550272688
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Plug-in(quotCOM@ppm) configuration version(5.6.0) greater than the actual version(5.5.0)
+            logLocatorsInfo:
+              - logType: appLog
+                logHandlers: [ 'grep WARN', 'tail -2', 'head -1' ]
+              - logType: alarmLog
+                logHandlers: [ 'tail -2', 'head -1' ]
+
+- caseId: 24
+  testId:
+  caseTitle: 测试启动ppm 模块时，ppm.xml 中配置的插件次版本号小于实际加载动态库次版本号的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/bin/plugin; ln -snf libppmQuotCOM.so.5.5.0 libppmQuotCOM.so;
+    cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/plugin name=\"quotCOM@ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xv,+2s/property name=\"version\" value=\"[0-9]+\.[0-9]+\.[0-9]+\"/property name=\"version\" value=\"5.4.0\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml;
+    cd {self.module.dceHome}/bin/plugin;
+    ls | grep -oP '^libppmQuotCOM\.so\.\d+\.\d+\.\d+$' | grep -v 5.5.0 | xargs -I xv ln -snf xv libppmQuotCOM.so"
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      common:
+        - verifyType: 4
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: shm_used_size=48550272688
+
+- caseId: 25
+  testId: 365445, 365472
+  caseTitle: 测试ppm 模块启动成功后，再次发送启动命令的的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  extraPythonExpr: self.consoleInfo = self.module.start(run_type)
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      plain:
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: ppm\(pid=\d+\) is running, please shutdown first\.
+      load:
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: ppmLoad\(pid=\d+\) is running, please shutdown first\.
+
+- caseId: 26
+  testId: 365477
+  caseTitle: 测试load 模式下启动ppm 模块，启动成功后，正常关闭ppm 模块后ppmLoad 进程重启ppm 模块的场景
+  caseRunTypes: [ 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml ppmLoad.xml.temp;
+    sed -n '/property name=\"restart\"/=' ppmLoad.xml.temp | xargs -I xv sed 'xvs/value=\"0\"/value=\"1\"/' ppmLoad.xml.temp > ppmLoad.xml"
+  teardownCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml.temp ppmLoad.xml"
+  extraPythonExpr: self.module.shutdown('plain'); self.moduleStartTime = datetime.now(); self.waitStartSecs += 10; sleep(self.waitStartSecs)
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child Process\(\d+\) ppm exit normal\. Return value = 0x0
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+        - verifyType: 1
+          verifyParams:
+            expectFlag: True
+            expectInfo: module
+
+- caseId: 27
+  testId: 365478
+  caseTitle: 测试load 模式下启动ppm 模块，启动成功后，强制关闭ppm 模块进程后ppmLoad 进程重启ppm 模块的场景
+  caseRunTypes: [ 'load' ]
+  setupCmd: rf"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml ppmLoad.xml.temp;
+    sed -n '/property name=\"restart\"/=' ppmLoad.xml.temp | xargs -I xv sed 'xvs/value=\"0\"/value=\"1\"/' ppmLoad.xml.temp > ppmLoad.xml"
+  teardownCmd: f"cd {self.module.dceHome}/conf/load; mv ppmLoad.xml.temp ppmLoad.xml"
+  extraCmd: f"cat {self.module.dceHome}/env/{self.module.moduleName}_pid.txt | xargs -I xv kill -9 xv"
+  extraPythonExpr: self.moduleStartTime = datetime.now(); self.waitStartSecs += 5; sleep(self.waitStartSecs)
+  waitStartSecs: 35
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      load:
+        - verifyType: 5
+          verifyParams:
+            expectFlag: True
+            expectType: regex
+            expectInfo: Child Process\(\d+\) ppm killed by signal 0x9\. Return value = 0x9
+            logLocatorsInfo:
+              - logType: loadLog
+                logHandlers: [ 'grep WARN', 'tail -1' ]
+        - verifyType: 1
+          verifyParams:
+            expectFlag: True
+            expectInfo: module
+
+- caseId: 28
+  testId:
+  caseTitle: 测试启动ppm 模块后，查看的ppm 版本信息的场景
+  caseRunTypes: [ 'plain', 'load' ]
+  setupCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml ppm.xml.temp;
+    sed -n '/configuration program=\"ppm\"/=' ppm.xml.temp |
+    xargs -I xv sed -r 'xvs/version=\"[0-9]+\.[0-9]+\.[0-9]+\"/version=\"9.9.9\"/' ppm.xml.temp > ppm.xml"
+  teardownCmd: rf"cd {self.module.remoteConfDir}; mv ppm.xml.temp ppm.xml"
+  extraCmd: f"{self.module.dceHome}/bin/dce ppm version"
+  expect:
+    moduleStartResult: successful
+    extraVerifyPoints:
+      plain:
+        - verifyType: 3
+          verifyParams:
+            expectFlag: True
+            expectType: str
+            expectInfo: Fail to load plug-in(quotCOM@ppm), configuration version(4.5.0) does not match the actual version(5.5.0).
